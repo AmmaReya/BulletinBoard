@@ -1,0 +1,33 @@
+{% extends 'flatpages/default.html' %}
+
+{% block title %}Мой профиль{% endblock %}
+
+{% block content %}
+    <div style = "text-align: center; margin-top: 20px">
+        <h3>Страница профиля пользователя </h3>
+        <table align = 'center'>
+            <style type="text/css">
+                TABLE {width: 100%;}
+                TD, TH {padding: 20px;}
+                TH {text-align: left; border: 1px solid white;}
+                TD {border-bottom: 1px solid black;}
+            </style>
+            <tr>
+                <td>Логин</td>
+                <td>{{ user.username }}</td>
+            </tr>
+            <tr>
+                <td>Email</td>
+                <td>{{ user.email }}</td>
+            </tr>
+        </table>
+        <div class="form-content">
+
+    </div>
+        <br><br>
+        {% if is_not_author %}
+        <a class='btn btn-sm btn-secondary' href="be_author">Хочу стать автором!</a>
+        {% endif %}
+    </div>
+
+{% endblock content%}

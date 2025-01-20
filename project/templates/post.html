@@ -1,0 +1,54 @@
+{% extends 'flatpages/default.html' %}
+
+{% load custom_filters %}
+
+{% csrf_token %}
+
+{% block title %}
+Post
+{% endblock title %}
+
+{% block content %}
+<h2>{{ post.post_time_in|date:'d M Y' }}</h2>
+<h1>{{ post.title|censor }}</h1>
+<hr>
+<h3>{{ post.text|safe}}</h3>
+<hr>
+
+{% if post.response_set.all %}
+    <div style="margin-top: 10px">
+        <h4><b>Все отклики:</b></h4>
+        <table align = 'center'>
+            <style type="text/css">
+            TABLE {width: 100%;}
+            TD, TH {padding: 10px;}
+            TD {border-bottom: 1px solid black;}
+            </style>
+            <tr>
+                <td><b>Дата создания</b></td>
+                <td><b>Автор</b></td>
+                <td><b>Отклик</b></td>
+            </tr>
+            {% for response in post.response_set.all %}
+            {% if response.status == True %}
+            <tr>
+                <td>{{response.resp_time_in}}</td>
+                <td>{{response.resp_author}}</td>
+                <td>{{response.text|safe}}</td>
+            </tr>
+            {% endif %}
+            {% endfor %}
+        </table>
+{% else %}
+        <p><b>На это объявление еще никто не откликнулся</b></p>
+{% endif %}
+        <br>
+{% if user.is_authenticated %}
+        <a href="{% url 'resp_create' post.id %}" class='btn btn-sm btn-secondary'>Откликнуться</a>
+    </div>
+{% else %}
+    <p>Авторизуйтесь, чтобы оставить отклик</p>
+    <a class="btn btn-primary" href="/accounts/login">Войти</a>
+{% endif %}
+
+{% endblock content %}

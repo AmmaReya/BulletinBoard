@@ -1,0 +1,73 @@
+{% extends 'flatpages/default.html' %}
+
+{% load custom_filters %}
+
+{% load custom_tags %}
+
+{% block title %}
+MyPostsResponses
+{% endblock title %}
+
+{% block content %}
+
+
+<h1>Управление откликами</h1>
+<h3>{% current_time '%b %d %Y' %}</h3>
+<form method="get" action=".">
+    <label for="post">Выбрать пост для просмотра откликов:</label>
+        <select name="post" id="post">
+            <option value="">Все посты</option>
+                {% for post in posts %}
+                    <option value="{{ post.pk }}">{{ post.title }}</option>
+                {% endfor %}
+        </select>
+    <button class='btn btn-sm btn-secondary'>Найти</button>
+</form>
+{% if responses %}
+            <table align = 'center'>
+                <style type="text/css">
+                TABLE {width: 100%;}
+                TD, TH {padding: 20px;}
+                TH {text-align: left; border: 1px solid white;}
+                TD {border-bottom: 1px solid black;}
+                </style>
+            <tr>
+                <td><b>Дата создания</b></td>
+                <td><b>Автор объявления</b></td>
+                <td><b>Объявление</b></td>
+                <td><b>Автор отклика</b></td>
+                <td><b>Отклик</b></td>
+                <td><b>Статус</b></td>
+                <td><b>Действия</b></td>
+
+            </tr>
+            {% for response in responses %}
+            <tr>
+                <td>{{ response.resp_time_in }}</td>
+                <td>{{ response.post.author }}</td>
+                <td><a href="{{ response.post.get_absolute_url }}">{{ response.post.title|censor }}</a></td>
+                <td>{{ response.resp_author.username }}</td>
+                <td>{{ response.text|censor }}</td>
+                <td>
+                    {% if response.status == False %}
+                    <a href="{% url 'resp_status' response.id %}">Принять</a>
+                    {% else %}
+                    <a>Отклик принят!</a>
+                    {% endif %}
+                </td>
+                <td>
+                    {% if perms.posts.delete_post %}
+                    <a href="{% url 'resp_delete' response.id %}">Удалить</a>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+            </table>
+{% else %}
+<hr>
+<a><b>Откликов нет</b></a>
+<hr>
+{% endif %}
+<br>
+        <a class='btn btn-sm btn-secondary' href="my_responses">Посмотреть мои отклики</a>
+{% endblock content %}

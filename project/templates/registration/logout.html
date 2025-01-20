@@ -1,0 +1,10 @@
+{% extends 'flatpages/default.html' %}
+
+{% block content %}
+<form>
+{% csrf_token %}
+    <input type="submit" value="Выйти">
+    <input type="hidden" name="next" value="{{ next }}">
+</form>
+
+{% endblock %}

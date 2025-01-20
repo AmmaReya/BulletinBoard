@@ -1,0 +1,61 @@
+{% extends 'flatpages/default.html' %}
+
+{% load custom_filters %}
+
+{% load custom_tags %}
+
+{% block title %}
+PostsSearch
+{% endblock title %}
+
+{% block content %}
+<h1>Поиск объявлений</h1>
+<h3>{% current_time '%b %d %Y' %}</h3>
+<form action="" method="get">
+    {{ filterset.form.as_p }}
+    <button class='btn btn-sm btn-secondary'>Найти</button>
+</form>
+{% if posts %}
+<table align = 'center'>
+    <style type="text/css">
+        TABLE {width: 100%;}
+        TD, TH {padding: 20px;}
+        TH {text-align: left; border: 1px solid white;}
+        TD {border-bottom: 1px solid black;}
+    </style>
+    <tr>
+        <td><b>Дата создания</b></td>
+        <td><b>Автор</b></td>
+        <td><b>Категория</b></td>
+        <td><b>Название</b></td>
+    </tr>
+    {% for post in posts %}
+    <tr>
+         <td>{{ post.post_time_in }}</td>
+         <td>{{ post.author.author }}</td>
+         <td>{{ post.category.category }}</td>
+         <td><a href="{{ post.get_absolute_url }}">{{ post.title|censor }}</a></td>
+    </tr>
+    {% endfor %}
+</table>
+{% else %}
+     <h2>Объявлений по вашему запросу нет!</h2>
+{% endif %}
+<br>
+{% if page_obj.has_previous %}
+    <a href="?{% url_replace page=1 %}">1</a>
+    {% if page_obj.previous_page_number != 1 %}
+        ...
+        <a href="?{% url_replace page=page_obj.previous_page_number %}">{{ page_obj.previous_page_number }}</a>
+    {% endif %}
+{% endif %}
+{{ page_obj.number }}
+{% if page_obj.has_next %}
+    <a href="?{% url_replace page=page_obj.next_page_number %}">{{ page_obj.next_page_number }}</a>
+    {% if paginator.num_pages != page_obj.next_page_number %}
+        ...
+        <a href="?{% url_replace page=page_obj.paginator.num_pages %}">{{ page_obj.paginator.num_pages }}</a>
+    {% endif %}
+{% endif %}
+
+{% endblock content %}

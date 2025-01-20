@@ -1,0 +1,12 @@
+{% extends 'flatpages/default.html' %}
+
+{% block content %}
+<h1>Отклик</h1>
+<hr>
+<form action="" method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    {{ form.media }}
+    <button class='btn btn-sm btn-secondary'>Сохранить</button>
+</form>
+{% endblock content %}
