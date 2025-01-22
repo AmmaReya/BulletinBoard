@@ -245,10 +245,4 @@ CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 
-CELERY_BEAT_SCHEDULE = {
-    'send-weekly-newsletter': {
-        'task': 'board.tasks.send_newsletter',
-        'schedule': crontab(day_of_week='monday', hour=7, minute=30),
-        'args': ('Weekly Newsletter', 'Here is the content of the weekly newsletter.'),
-    },
-}
+SITE_URL = 'http://127.0.0.1:8000'
